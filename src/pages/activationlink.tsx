@@ -1,10 +1,11 @@
 import Navbar from "../components/Atoms/Navbar";
-import Login1 from "../components/Atoms/Login1";
+import ActivationLink from "../components/Atoms/Activationlink";
+
 const Index = () => (
   <div>
     <Navbar></Navbar>
-    <Login1></Login1>
-  </div>
+    <ActivationLink></ActivationLink>
+      </div>
 );
 
 export default Index;
