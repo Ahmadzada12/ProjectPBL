@@ -1,4 +1,4 @@
-import { Flex, Box, Image, Button } from "@chakra-ui/react";
+import { Flex, Box, Image, Button, Heading } from "@chakra-ui/react";
 import { Spacer } from "@chakra-ui/react";
 import { useColorMode } from "@chakra-ui/react";
 import { Icon } from "@chakra-ui/react";
@@ -6,7 +6,7 @@ import { MdDarkMode, MdLightbulbOutline } from "react-icons/md";
 
 
 
-function Navbar () {
+function Navbar ({namapaage}) {
   const { colorMode, toggleColorMode } = useColorMode()
   return (
 
@@ -34,6 +34,7 @@ function Navbar () {
         
       </Box>
       <Spacer></Spacer>
+      <Heading size="lg" mr={4}>{namapaage}</Heading>
       <Button onClick={toggleColorMode}>
         {colorMode === 'light' ? <MdDarkMode/> : <MdLightbulbOutline/>}
       </Button>

@@ -4,7 +4,7 @@ import { Box } from "@chakra-ui/react";
 
 const SuccessPass = () => (
   <Box>
-    <Navbar />
+    <Navbar namapaage={""}/>
     <SuccessPassword></SuccessPassword>
   </Box>
 );

@@ -3,7 +3,7 @@ import ActivationLink from "../components/Atoms/Activationlink";
 
 const Index = () => (
   <div>
-    <Navbar></Navbar>
+    <Navbar namapaage={""}></Navbar>
     <ActivationLink></ActivationLink>
       </div>
 );

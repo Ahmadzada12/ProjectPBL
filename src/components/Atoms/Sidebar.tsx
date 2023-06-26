@@ -41,7 +41,7 @@ export default function Sidebar({ children }: { children: ReactNode }) {
         onClose={() => onClose}
         display={{ base: "none", md: "block" }}
       />
-      {/* <Drawer
+      <Drawer
         autoFocus={false}
         isOpen={isOpen}
         placement="left"
@@ -54,7 +54,7 @@ export default function Sidebar({ children }: { children: ReactNode }) {
         <DrawerContent>
           <SidebarContent onClose={onClose} />
         </DrawerContent>
-      </Drawer> */}
+      </Drawer>
       {/* mobilenav */}
       <MobileNav display={{ base: "flex", md: "none" }} onOpen={onOpen} />
       <Box ml={{ base: 0, md: 60 }} p="4">
@@ -79,7 +79,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       h="720"
       {...rest}
     >
-      <Flex h="5" alignItems="center" mx="8" justifyContent="space-between">
+      <Flex h="5" alignItems="center" mx="8" justifyContent="flex-start">
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
       {LinkItems.map((link) => (
@@ -148,11 +148,11 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
       ml={{ base: 0, md: 60 }}
       px={{ base: 4, md: 24 }}
       height="20"
-      alignItems="center"
+      alignItems="flex-start"
       bg={useColorModeValue("white", "gray.900")}
       borderBottomWidth="1px"
       borderBottomColor={useColorModeValue("gray.200", "gray.700")}
-      justifyContent="flex-start"
+      justifyContent="center"
       {...rest}
     >
       <IconButton

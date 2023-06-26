@@ -31,6 +31,7 @@ const REGISTER_MUTATION = gql`
 `;
 
 const Login = () => {
+
   const [loginUser, { data, loading, error }] = useMutation(REGISTER_MUTATION);
   const router = useRouter();
   const [showAlert, setShowAlert] = useState(false);
@@ -61,15 +62,18 @@ const Login = () => {
       display="flex"
       justifyContent="center"
       alignItems="center"
-      height="90vh"
+      height="90.8vh"
       flexDirection="column"
     >
       <Fade in={showAlert}>
         <Alert status="error">
           <AlertIcon />
           <AlertTitle>Your data is not valid!</AlertTitle>
-          <AlertDescription>Your Email or Password may doesn't matching</AlertDescription>
-        </Alert></Fade>
+          <AlertDescription>
+            Your Email or Password may doesn't matching
+          </AlertDescription>
+        </Alert>
+      </Fade>
       <Box
         maxWidth="375px"
         maxHeight="662px"

@@ -25,9 +25,10 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
-} from '@chakra-ui/react'
+} from "@chakra-ui/react";
 
 const Rocket = () => {
+  console.log("COK");
   return (
     <Box
       // backgroundImage="url(https://th.bing.com/th/id/OIP.FpBTdmS425XMYJ6kJH-fVAHaHd?w=174&h=180&c=7&r=0&o=5&dpr=2&pid=1.7)"
@@ -82,7 +83,9 @@ const Rocket = () => {
               />
               <Avatar name="Christian Nwamba" src="https://bit.ly/code-beast" />
             </AvatarGroup>
-            <Heading ml={2} size="xs">Happy Customer</Heading>
+            <Heading ml={2} size="xs">
+              Happy Customer
+            </Heading>
           </Flex>
           <Heading color="#FFD95A" size="2xl">
             Let's Start Something New Together

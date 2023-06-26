@@ -5,11 +5,10 @@ import Articles1 from "../components/Atoms/Articles";
 
 const Articles = () => (
   <div>
-    <Navbar />
+    <Navbar namapaage={"Articles"} />
     <Sidebar>
-    <Articles1 />
+      <Articles1 />
     </Sidebar>
-    
   </div>
 );
 

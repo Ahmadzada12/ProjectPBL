@@ -1,13 +1,13 @@
 import AddNewPost from "../components/Atoms/AddNewPost";
 import Navbar from "../components/Atoms/Navbar";
 import Sidebar from "../components/Atoms/Sidebar";
-const NewPost = () => (
+const EditPost = () => (
     <div>
-      <Navbar namapaage={"Add new post"} />
+      <Navbar namapaage={"Edit Post"} />
       <Sidebar >
       <AddNewPost/>
       </Sidebar>
     </div>
   );
   
-  export default NewPost;
+  export default EditPost;

@@ -6,14 +6,14 @@ import { Text } from "@chakra-ui/react";
 export default function ActivationLink(): JSX.Element {
   return (
     <Flex
-      minH={"100vh"}
+      minH={"89vh"}
       align={"center"}
       justify={"center"}
       bg={useColorModeValue("gray.50", "#E5E5E5")}
     >
       <Stack
         spacing={6}
-        w={"full"}
+        // w={"full"}
         maxW={"500px"}
         h={"300px"}
         bg={useColorModeValue("white", "#FFFFFF")}

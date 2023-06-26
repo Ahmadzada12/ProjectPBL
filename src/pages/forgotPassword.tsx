@@ -2,7 +2,7 @@ import Navbar from "../components/Atoms/Navbar";
 import ForgotPassword from "../components/Atoms/ForgotPassword";
 const ForgotPass = () => (
   <div>
-    <Navbar></Navbar>
+    <Navbar namapaage={""}></Navbar>
     <ForgotPassword></ForgotPassword>
   </div>
 );

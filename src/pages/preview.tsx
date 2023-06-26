@@ -2,7 +2,7 @@ import Navbar from "../components/Atoms/Navbar";
 import PreviewArt from "../components/Atoms/PreviewArticles";
 const Preview = () => (
   <div>
-    <Navbar/>
+    <Navbar namapaage={"Preview"}/>
     <PreviewArt/>
   </div>
 );

@@ -4,6 +4,7 @@ import {
   AlertIcon,
   AlertTitle,
   AlertDescription,
+  Flex,
 } from "@chakra-ui/react";
 import {
   Table,
@@ -50,104 +51,50 @@ import { BsFillSearchHeartFill, BsTrash } from "react-icons/bs";
 import { Icon } from "@chakra-ui/react";
 import { useState } from "react";
 import { useEffect } from "react";
+import { gql, useMutation, useQuery } from "@apollo/client";
 
-interface TableData {
-  id: number;
-  title: string;
-  creator: string;
-  status: string;
-  publishTime: string;
-  views: number;
-}
-
-const data: TableData[] = [
-  {
-    id: 1,
-    title: "Pengaplikasian acara",
-    creator: "Ahmad Alim zada",
-    status: "scheduled",
-    publishTime: "2023-05-25 15:30",
-    views: 23,
-  },
-  {
-    id: 0,
-    title: "Pengaplikasian acara",
-    creator: "Ahmad Alim zada",
-    status: "published",
-    publishTime: "2023-05-25 15:30",
-    views: 23,
-  },
-  {
-    id: 2,
-    title: "Pengaplikasian acara",
-    creator: "Ahmad Alim zada",
-    status: "scheduled",
-    publishTime: "2023-05-25 15:30",
-    views: 23,
-  },
-  {
-    id: 3,
-    title: "Pengaplikasian acara",
-    creator: "Ahmad Alim zada",
-    status: "scheduled",
-    publishTime: "2023-05-25 15:30",
-    views: 23,
-  },
-  {
-    id: 4,
-    title: "Pengaplikasian acara",
-    creator: "Ahmad Alim zada",
-    status: "published",
-    publishTime: "2023-05-25 15:30",
-    views: 23,
-  },
-  {
-    id: 5,
-    title: "Pengaplikasian acara",
-    creator: "Ahmad Alim zada",
-    status: "scheduled",
-    publishTime: "2023-05-25 15:30",
-    views: 23,
-  },
-  {
-    id: 6,
-    title: "Pengaplikasian acara",
-    creator: "Ahmad Alim zada",
-    status: "scheduled",
-    publishTime: "2023-05-25 15:30",
-    views: 23,
-  },
-  {
-    id: 7,
-    title: "Pengaplikasian acara",
-    creator: "Ahmad Alim zada",
-    status: "published",
-    publishTime: "2023-05-25 15:30",
-    views: 23,
-  },
-  {
-    id: 8,
-    title: "Pengaplikasian acara",
-    creator: "Ahmad Alim zada",
-    status: "scheduled",
-    publishTime: "2023-05-25 15:30",
-    views: 23,
-  },
-  {
-    id: 9,
-    title: "Pengaplikasian acara",
-    creator: "Ahmad Alim zada",
-    status: "scheduled",
-    publishTime: "2023-05-25 15:30",
-    views: 23,
-  },
-];
+const LIST_ARTICLES = gql`
+  query Blog {
+    blogs {
+      id_blog
+      author
+      isi
+      tanggal
+      judul
+      gambar
+      jenisblog {
+        id_jenisblog
+        bidang_jenisblog
+      }
+      id_jenisblog
+    }
+  }
+`;
+const DELETE_ARTICLES = gql`
+  mutation DeleteBlog($id_blog: String!) {
+    removeBlog(id_blog: $id_blog) {
+      id_blog
+    }
+  }
+`;
 
 const Articles1 = () => {
+  const { error, data, loading, refetch } = useQuery(LIST_ARTICLES);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [tableData, setTableData] = useState(data); // Gunakan state untuk memanipulasi data
-  const [activeData, setActiveData] = useState<TableData | null>(null);
+  const [tableData, setTableData] = useState(data?.blogs || []); // Gunakan state untuk memanipulasi data
+  const [activeData, setActiveData] = useState(null);
   const [showAlert, setShowAlert] = useState(false);
+
+  useEffect(() => {
+    if (loading) {
+      console.log("Data is loading...");
+    } else if (data) {
+      setTableData(data.blogs);
+      console.log(data.blogs);
+    } else {
+      console.log("Error retrieving data:", error);
+    }
+  }, [loading, data, error]);
   useEffect(() => {
     if (showAlert) {
       const timeout = setTimeout(() => {
@@ -158,20 +105,44 @@ const Articles1 = () => {
     }
   }, [showAlert]);
 
-  const handleDelete = () => {
+  useEffect(() => {}, [activeData]);
+
+  const [deleteArticles] = useMutation(DELETE_ARTICLES);
+
+  const handleDelete = async () => {
     if (activeData) {
-      setTableData(tableData.filter((item) => item.id !== activeData.id));
+      try {
+        await deleteArticles({
+          variables: {
+            id_blog: activeData.id_blog.toString(),
+          },
+        });
+        refetch();
+      } catch (error) {}
       setActiveData(null);
       onClose();
       setShowAlert(true);
+
+      //   try {
+      //     const { data } = await deleteArticles({
+      //       variables: {
+      // id_blog:activeData
+      //       },
+      //     });
+      //   } catch (error) {}
+      //     // useMutation(DELETE_ARTICLES);
+      //     setActiveData(null);
+      //     onClose();
+      //     setShowAlert(true);
+      //   }
     }
   };
 
-  const toggleStatus = (id: number) => {
+  const toggleStatus = (id_blog: number) => {
     // Fungsi untuk mengubah status
     setTableData(
       tableData.map((item) =>
-        item.id === id
+        item.id_blog === id_blog
           ? {
               ...item,
               status: item.status === "published" ? "scheduled" : "published",
@@ -182,14 +153,15 @@ const Articles1 = () => {
   };
 
   return (
-    <Box
+    <Flex
       mr={7}
       display="flex"
-      justifyContent="center"
-      height="85vh"
-      w="1000px"
+      justifyContent="flex-start"
+      // height="600px"
+      maxH="88.96vh"
+      // w="1000px"
       flexDirection="column"
-      position="absolute"
+      position="relative"
     >
       <HStack>
         <Text>Blog</Text>
@@ -265,111 +237,118 @@ const Articles1 = () => {
           Your articles has been deleted
         </Alert>
       )}
-      <Table
-        variant="unstyled"
-        colorScheme="teal"
-        size="10"
-        h={"960"}
-        borderWidth="2px"
-        maxH="960px"
-        borderColor={"teal.400"}
-        mt={3}
-      >
-        <Thead>
-          <tr>
-            <Th>Title</Th>
-            <Th>Creator</Th>
-            <Th>Status</Th>
-            <Th>Publish Time</Th>
-            <Th>Views</Th>
-            <Th>Action</Th>
-          </tr>
-        </Thead>
-        <Tbody>
-          {tableData.map((item) => (
-            <Tr key={item.id}>
-              <Td>{item.title}</Td>
-              <Td>
-                <Icon as={FaUserAlt} /> {item.creator}
-              </Td>
-              <Td>
-                <Box
-                  borderRadius="full"
-                  borderWidth={2}
-                  borderColor={
-                    item.status == "published" ? "#9AE6B4" : "#FBD38D"
-                  }
-                  color={item.status == "published" ? "#9AE6B4" : "#FBD38D"}
-                  onClick={() => toggleStatus(item.id)} // Tambahkan onClick handler
-                  cursor="pointer" // Tambahkan cursor pointer untuk indikasi bahwa ini dapat diklik
-                  textAlign="center"
-                  mr={4}
-                  display="inline-block"
-                  p={1}
-                  minW={24}
-                >
-                  {item.status}
-                </Box>
-              </Td>
-              <Td>
-                <Text>
-                  <Icon as={BiNotepad} boxSize="5" />
-                  {format(new Date(item.publishTime), "dd MMMM yyyy HH:mm")}
-                </Text>
-              </Td>
-              <Td>
-                {item.views} <Icon as={AiOutlineArrowUp} boxSize="5" />
-              </Td>
-              <Td>
-                <IconButton
-                  aria-label="See"
-                  colorScheme={"teal"}
-                  size={"xs"}
-                  icon={<AiOutlineEye />}
-                />
-                <IconButton
-                  aria-label="Edit"
-                  colorScheme={"red"}
-                  size={"xs"}
-                  icon={<TbEdit />}
-                  ml={2}
-                />
-                <br />
-                <IconButton
-                  onClick={() => {
-                    setActiveData(item); // set data aktif saat tombol delete diklik
-                    onOpen();
-                  }}
-                  aria-label="Delete"
-                  colorScheme="blue"
-                  size={"xs"}
-                  ml={4}
-                  icon={<BsTrash />}
-                />
-                <Modal isOpen={isOpen} onClose={onClose}>
-                  <ModalOverlay />
-                  <ModalContent p={5} mt={60}>
-                    <ModalHeader fontSize="50px">Delete Post?</ModalHeader>
-                    <ModalCloseButton />
-                    <ModalBody>
-                      This will delete this post from your blog.
-                    </ModalBody>
-                    <ModalFooter mt={10} justifyContent="center" fontSize={20}>
-                      <Link colorScheme="black" mr={3} onClick={onClose}>
-                        Cancel
-                      </Link>
-                      <Link color="red" onClick={handleDelete}>
-                        Confirm
-                      </Link>
-                    </ModalFooter>
-                  </ModalContent>
-                </Modal>
-              </Td>
-            </Tr>
-          ))}
-        </Tbody>
-      </Table>
-    </Box>
+      <Box borderWidth="2px" borderColor={"teal.400"} height="610px" mt={2}>
+        <Table
+          variant="unstyled"
+          // colorScheme="teal"
+          size="10"
+          // height="600px"
+          w="1000px"
+          mt={3}
+          ml={2}
+        >
+          <Thead>
+            <tr>
+              <Th>Title</Th>
+              <Th>Creator</Th>
+              <Th>Status</Th>
+              <Th>Publish Time</Th>
+              <Th>Views</Th>
+              <Th>Action</Th>
+            </tr>
+          </Thead>
+          <Tbody>
+            {tableData.map((item) => (
+              <Tr>
+                <Td>{item.judul}</Td>
+                <Td>
+                  <Icon as={FaUserAlt} />
+                  {item.author}
+                </Td>
+                <Td>
+                  <Box
+                    borderRadius="full"
+                    borderWidth={2}
+                    borderColor={
+                      item.status == "published" ? "#9AE6B4" : "#FBD38D"
+                    }
+                    color={item.status == "published" ? "#9AE6B4" : "#FBD38D"}
+                    onClick={() => toggleStatus(null)} // Tambahkan onClick handler
+                    cursor="pointer" // Tambahkan cursor pointer untuk indikasi bahwa ini dapat diklik
+                    textAlign="center"
+                    mr={4}
+                    display="inline-block"
+                    p={1}
+                    minW={24}
+                  >
+                    {item.status}
+                  </Box>
+                </Td>
+                <Td>
+                  <Text>
+                    <Icon as={BiNotepad} boxSize="5" />
+                    {item.tanggal}
+                  </Text>
+                </Td>
+                <Td>
+                  <Icon as={AiOutlineArrowUp} boxSize="5" />
+                  {item.views}
+                </Td>
+                <Td>
+                  <IconButton
+                    aria-label="See"
+                    colorScheme={"teal"}
+                    size={"xs"}
+                    icon={<AiOutlineEye />}
+                  />
+                  <IconButton
+                    aria-label="Edit"
+                    colorScheme={"red"}
+                    size={"xs"}
+                    icon={<TbEdit />}
+                    ml={2}
+                  />
+                  <br />
+                  <IconButton
+                    onClick={() => {
+                      setActiveData(item); // set data aktif saat tombol delete diklik
+                      onOpen();
+                    }}
+                    aria-label="Delete"
+                    colorScheme="blue"
+                    size={"xs"}
+                    ml={4}
+                    icon={<BsTrash />}
+                  />
+                  <Modal isOpen={isOpen} onClose={onClose}>
+                    <ModalOverlay />
+                    <ModalContent p={5} mt={60}>
+                      <ModalHeader fontSize="50px">Delete Post?</ModalHeader>
+                      <ModalCloseButton />
+                      <ModalBody>
+                        This will delete this post from your blog.
+                      </ModalBody>
+                      <ModalFooter
+                        mt={10}
+                        justifyContent="center"
+                        fontSize={20}
+                      >
+                        <Link colorScheme="black" mr={3} onClick={onClose}>
+                          Cancel
+                        </Link>
+                        <Link color="red" onClick={handleDelete}>
+                          Confirm
+                        </Link>
+                      </ModalFooter>
+                    </ModalContent>
+                  </Modal>
+                </Td>
+              </Tr>
+            ))}
+          </Tbody>
+        </Table>
+      </Box>
+    </Flex>
   );
 };
 

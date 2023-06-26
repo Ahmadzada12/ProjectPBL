@@ -4,7 +4,7 @@ import OtpForm from "../components/Atoms/OTPVerification";
 
 const Verify = () => (
   <div>
-    <Navbar></Navbar>
+    <Navbar namapaage={"Verify"}></Navbar>
     <OtpForm></OtpForm>
   </div>
 );
